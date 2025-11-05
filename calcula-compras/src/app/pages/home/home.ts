@@ -1,20 +1,23 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, signal, computed, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, signal, computed, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AsyncPipe, DecimalPipe } from '@angular/common';
-	import {
+import { Observable, of, switchMap, take, tap } from 'rxjs';
+import {
     TuiAppearance,
     TuiButton,
     TuiError,
-    TuiIcon,
-    TuiNotification,
     TuiTextfield,
     TuiTitle,
     TuiScrollable,
-    TuiScrollbar
+    TuiScrollbar,
+    TuiAlertService,
+    TuiDialogService,
+    TuiDialogContext
 } from '@taiga-ui/core';
-import {TuiFieldErrorPipe, TuiSegmented, TuiSwitch, TuiTooltip} from '@taiga-ui/kit';
+import {TUI_CONFIRM, type TuiConfirmData} from '@taiga-ui/kit';
 import {TuiCardLarge, TuiForm, TuiHeader} from '@taiga-ui/layout';
-import {type TuiComparator, TuiTable} from '@taiga-ui/addon-table';
+import { TuiTable } from '@taiga-ui/addon-table';
+import {type PolymorpheusContent} from '@taiga-ui/polymorpheus';
 
 	import {
     CdkFixedSizeVirtualScroll,
@@ -22,7 +25,7 @@ import {type TuiComparator, TuiTable} from '@taiga-ui/addon-table';
     CdkVirtualScrollViewport,
 } from '@angular/cdk/scrolling';
 import { NgxMaskDirective } from 'ngx-mask';
-import { Observable, of } from 'rxjs';
+
 
 
 @Component({
@@ -36,14 +39,10 @@ import { Observable, of } from 'rxjs';
     TuiButton,
     TuiCardLarge,
     TuiError,
-    TuiFieldErrorPipe,
     TuiForm,
     TuiHeader,
-    // TuiIcon,
-    // TuiNotification,
     TuiTextfield,
     TuiTitle,
-
     CdkFixedSizeVirtualScroll,
     CdkVirtualForOf,
     CdkVirtualScrollViewport,
@@ -55,13 +54,12 @@ import { Observable, of } from 'rxjs';
   styleUrl: './home.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Home implements OnInit {
+export class Home {
   form: FormGroup;
   list = signal<any[]>([]);
   valorTotal = computed(() =>
     this.list().reduce((acc, item) => acc + Number(item.valor) * Number(item.quantidade), 0)
   );
-
 
   protected readonly columns = ['valor', 'produto', 'quantidade', 'actions'];
 
@@ -74,9 +72,7 @@ export class Home implements OnInit {
       quantidade: ['', [Validators.required]],
       produto: ['']
     })
-  }
 
-  ngOnInit() {
     const savedList = sessionStorage.getItem('lista-compras');
     if (savedList) {
       this.list.set(JSON.parse(savedList));
@@ -92,28 +88,10 @@ export class Home implements OnInit {
     }
   }
 
-
   removerItem(index: number) {
     this.list.update(current => current.filter((_, i) => i !== index));
     sessionStorage.setItem('lista-compras', JSON.stringify(this.list()));
     this.cdr.markForCheck();
-  }
-
-  getErrorMessage(controlName: string): string | null {
-    const control = this.form.get(controlName);
-    if (!control || !control.errors) return null;
-    const label = controlName.charAt(0).toUpperCase() + controlName.slice(1);
-
-    const errors = control.errors;
-    if (errors['required']) {
-      return `${label} é obrigatório.`;
-    }
-
-    if (errors['min']) {
-      return `${label} mínimo é ${errors['min'].min}.`;
-    }
-
-    return null;
   }
 
   getErrorMessage$(controlName: string): Observable<string | null> {
@@ -135,10 +113,4 @@ export class Home implements OnInit {
 
     return of(null);
   }
-
-
-
-
-
-
 }

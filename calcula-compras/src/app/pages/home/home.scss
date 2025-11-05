@@ -34,3 +34,8 @@ table {
 .viewport {
     block-size: 15.625rem;
 }
+
+.button-box {
+  display: flex;
+  justify-content: space-between;
+}

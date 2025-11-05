@@ -25,7 +25,6 @@
         />
     </tui-textfield>
     <tui-error
-        formControlName="valor"
         [error]="getErrorMessage$('valor') | async"
     />
 
@@ -40,8 +39,7 @@
         />
     </tui-textfield>
     <tui-error
-        formControlName="quantidade"
-        [error]="[] | tuiFieldError | async"
+        [error]="getErrorMessage$('quantidade') | async"
     />
 
     <tui-textfield>
@@ -53,11 +51,18 @@
         />
     </tui-textfield>
     <tui-error
-        formControlName="produto"
-        [error]="[] | tuiFieldError | async"
+        [error]="getErrorMessage$('produto') | async"
     />
-    <div>
+    <div class="button-box">
       <button type="submit" tuiButton>Adicionar a lista</button>
+      @if(list().length > 0) {
+        <button
+          tuiButton
+          appearance="accent"
+        >
+          Limpar
+        </button>
+      }
     </div>
   </form>
 
