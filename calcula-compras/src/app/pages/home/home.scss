@@ -1,0 +1,36 @@
+.form {
+  padding: 1rem;
+}
+
+.valor {
+  font-size: 2rem !important;
+  margin: 0.5rem 0 !important;
+}
+
+form {
+  margin-bottom: 2rem;
+}
+
+table {
+    inline-size: 100%;
+
+    tr {
+        block-size: 2.8125rem;
+    }
+
+    td {
+        &:first-child {
+            inline-size: 10rem;
+            font-weight: bold;
+        }
+
+        &:last-child {
+            inline-size: 3rem;
+            text-align: center;
+        }
+    }
+}
+
+.viewport {
+    block-size: 15.625rem;
+}
