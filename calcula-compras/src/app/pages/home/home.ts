@@ -22,6 +22,8 @@ import {type TuiComparator, TuiTable} from '@taiga-ui/addon-table';
     CdkVirtualScrollViewport,
 } from '@angular/cdk/scrolling';
 import { NgxMaskDirective } from 'ngx-mask';
+import { Observable, of } from 'rxjs';
+
 
 @Component({
   selector: 'app-home',
@@ -93,6 +95,50 @@ export class Home implements OnInit {
 
   removerItem(index: number) {
     this.list.update(current => current.filter((_, i) => i !== index));
+    sessionStorage.setItem('lista-compras', JSON.stringify(this.list()));
     this.cdr.markForCheck();
   }
+
+  getErrorMessage(controlName: string): string | null {
+    const control = this.form.get(controlName);
+    if (!control || !control.errors) return null;
+    const label = controlName.charAt(0).toUpperCase() + controlName.slice(1);
+
+    const errors = control.errors;
+    if (errors['required']) {
+      return `${label} é obrigatório.`;
+    }
+
+    if (errors['min']) {
+      return `${label} mínimo é ${errors['min'].min}.`;
+    }
+
+    return null;
+  }
+
+  getErrorMessage$(controlName: string): Observable<string | null> {
+    const control = this.form.get(controlName);
+    if (!control || !control.errors || (!control.touched && !control.dirty)) {
+      return of(null);
+    }
+
+    const errors = control.errors;
+    const label = controlName.charAt(0).toUpperCase() + controlName.slice(1);
+
+    if (errors['required']) {
+      return of(`${label} é obrigatório.`);
+    }
+
+    if (errors['min']) {
+      return of(`${label} mínimo é ${errors['min'].min}.`);
+    }
+
+    return of(null);
+  }
+
+
+
+
+
+
 }
