@@ -36,7 +36,7 @@
             placeholder="0"
             tuiTextfield
             mask="0*"
-            type="number"
+            type="tel"
         />
     </tui-textfield>
     <tui-error
@@ -124,7 +124,7 @@
                           *tuiCell="'produto'"
                           tuiTd
                       >
-                          {{ item.produto }}
+                          {{ item.produto ? item.produto : '-' }}
                       </td>
                       <td
                           *tuiCell="'quantidade'"
