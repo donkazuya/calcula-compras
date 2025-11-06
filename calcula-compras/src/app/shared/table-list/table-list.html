@@ -1,0 +1,137 @@
+<h1>tres</h1>
+<form [formGroup]="formList">
+  <tui-scrollbar>
+    <cdk-virtual-scroll-viewport
+        #viewport
+        appendOnly
+        tuiScrollable
+        class="viewport tui-zero-scrollbar"
+        [itemSize]="45"
+        [maxBufferPx]="600"
+        [minBufferPx]="400"
+    >
+        <table
+            tuiTable
+            [columns]="columns"
+        >
+            <thead>
+                <tr tuiThGroup>
+                  <th
+                      *tuiHead="'quantidade'"
+                      tuiTh
+                      [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
+                  >
+                      Quantidade
+                  </th>
+                  <th
+                      *tuiHead="'valorUnitario'"
+                      tuiTh
+                      [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
+                  >
+                      Valor unitário
+                  </th>
+                  <th
+                      *tuiHead="'valor'"
+                      tuiTh
+                      [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
+                  >
+                      Valor
+                  </th>
+                  <th
+                      *tuiHead="'produto'"
+                      tuiTh
+                      [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
+                  >
+                      Produto
+                  </th>
+                  <th
+                      *tuiHead="'actions'"
+                      tuiTh
+                      [style.top.px]="-(viewport.getOffsetToRenderedContentStart() || 0)"
+                  >
+                      Ações
+                  </th>
+                </tr>
+            </thead>
+            <tbody tuiTbody formArrayName="itens">
+                <tr
+                    *ngFor="let item of list(); let i = index"
+                    [formGroupName]="i"
+                    tuiTr
+                >
+                  <td
+                      *tuiCell="'quantidade'"
+                      tuiTd
+                  >
+                      <tui-textfield class="field-table">
+                          <input
+                              formControlName="quantidade"
+                              placeholder="0"
+                              tuiTextfield
+                              mask="0*"
+                              type="tel"
+                              (blur)="salvarEdicao(i)"
+                          />
+                      </tui-textfield>
+                  </td>
+                  <td
+                      *tuiCell="'valorUnitario'"
+                      tuiTd
+                  >
+                      <tui-textfield class="field-table">
+                          <input
+                              formControlName="valor"
+                              placeholder="R$ 0,00"
+                              tuiTextfield
+                              mask="separator.2"
+                              thousandSeparator="."
+                              decimalMarker=","
+                              prefix="R$ "
+                              type="tel"
+                              (blur)="salvarEdicao(i);"
+                          />
+                      </tui-textfield>
+                  </td>
+                  <td
+                      *tuiCell="'valor'"
+                      tuiTd
+                  >
+                      R$ {{
+                          (item.valor * item.quantidade) % 1 === 0
+                            ? (item.valor * item.quantidade)
+                            : (item.valor * item.quantidade) | number:'1.2-2':'pt-BR'
+                          }}
+
+                  </td>
+                  <td
+                      *tuiCell="'produto'"
+                      tuiTd
+                  >
+                      <tui-textfield class="field-table">
+                          <input
+                              formControlName="produto"
+                              placeholder="Produto não informado"
+                              tuiTextfield
+                              [ngClass]="item.produto ? '' : 'font-italic'"
+                              (blur)="salvarEdicao(i)"
+                          />
+                      </tui-textfield>
+                  </td>
+                  <td
+                      *tuiCell="'actions'"
+                      tuiTd
+                  >
+                      <button
+                      tuiButton
+                      appearance="negative"
+                      (click)="handleLimpar('item', i)"
+                      iconEnd="@tui.trash"
+                      size="s"
+                      ></button>
+                  </td>
+                </tr>
+            </tbody>
+        </table>
+    </cdk-virtual-scroll-viewport>
+  </tui-scrollbar>
+</form>
