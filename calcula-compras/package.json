@@ -31,6 +31,7 @@
     "@capacitor/android": "^7.4.4",
     "@capacitor/cli": "^7.4.4",
     "@capacitor/core": "^7.4.4",
+    "@capacitor/ios": "^7.4.4",
     "@taiga-ui/addon-mobile": "^4.60.0",
     "@taiga-ui/addon-table": "^4.60.0",
     "@taiga-ui/cdk": "^4.60.0",

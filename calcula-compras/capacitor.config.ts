@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.calculaCompras.app',
-  appName: 'calcula-compras',
+  appName: 'Calcular Compras',
   webDir: './dist/calcula-compras/browser/'
 };
 
