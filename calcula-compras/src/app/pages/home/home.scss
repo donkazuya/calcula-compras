@@ -1,9 +1,12 @@
 .form {
   padding: 1rem;
 }
+.valor-total {
+  padding: 1rem 0;
+}
 
 .valor {
-  font-size: 2rem !important;
+  font-size: 3rem !important;
   margin: 0.5rem 0 !important;
 }
 
@@ -23,6 +26,9 @@ table {
             inline-size: 10rem;
             font-weight: bold;
         }
+        &:nth-child(2), &:nth-child(3) {
+          inline-size: 10rem;
+        }
 
         &:last-child {
             inline-size: 3rem;
@@ -38,4 +44,17 @@ table {
 .button-box {
   display: flex;
   justify-content: space-between;
+}
+
+.font-italic {
+  font-style: italic !important;
+  opacity: 0.5;
+}
+
+.field-table {
+  input {
+    padding: .75rem;
+    margin: 0 !important;
+    border: none;
+  }
 }
