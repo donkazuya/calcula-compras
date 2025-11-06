@@ -58,3 +58,12 @@ table {
     border: none;
   }
 }
+
+::ng-deep .t-sort {
+  cursor: inherit !important;
+  tui-icon.t-icon {
+    display: none !important;
+  }
+}
+
+
