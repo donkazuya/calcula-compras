@@ -166,7 +166,12 @@
                             *tuiCell="'valor'"
                             tuiTd
                         >
-                            R$ {{ item.valor * item.quantidade }}
+                            R$ {{
+                                (item.valor * item.quantidade) % 1 === 0
+                                  ? (item.valor * item.quantidade)
+                                  : (item.valor * item.quantidade) | number:'1.2-2':'pt-BR'
+                               }}
+
                         </td>
                         <td
                             *tuiCell="'produto'"
