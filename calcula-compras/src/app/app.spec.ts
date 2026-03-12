@@ -14,10 +14,9 @@ describe('App', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should render title', () => {
+  it(`should have as title 'calcula-compras'`, () => {
     const fixture = TestBed.createComponent(App);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, calcula-compras');
+    const app = fixture.componentInstance;
+    expect(app['title']()).toEqual('calcula-compras');
   });
 });

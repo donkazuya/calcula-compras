@@ -54,7 +54,7 @@ export class Home {
     this.form = this.fb.group({
       valor: ['', [Validators.required]],
       quantidade: ['', [Validators.required]],
-      produto: ['']
+      produto: [''],
     });
 
     const savedList = sessionStorage.getItem('lista-compras');
@@ -100,7 +100,7 @@ export class Home {
       .subscribe();
   }
 
-  protected trackByIndex(index: number): number {
+  trackByIndex(index: number): number {
       return index;
   }
 }
