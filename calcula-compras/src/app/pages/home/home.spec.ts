@@ -76,11 +76,15 @@ describe('Home', () => {
 
 
   it('deve renderizar <app-table-list> quando lista tem itens', () => {
-    component.list.set([{ produto: 'Leite', quantidade: 1, valor: 5 }]);
+    const mockItem = [{ produto: 'Leite', quantidade: 1, valor: 5 }];
+    localStorage.setItem('lista-compras', JSON.stringify(mockItem));
+    component.list.set(mockItem);
+    
     fixture.detectChanges();
 
     const tableList = fixture.debugElement.query(By.css('app-table-list'));
     expect(tableList).toBeTruthy();
+    localStorage.clear();
   });
 
 });
@@ -93,7 +97,7 @@ describe('Home (métodos TS)', () => {
   beforeEach(() => {
     erroFormSpy = jasmine.createSpyObj('ErroForm', ['getErrorMessage$']);
     limparServiceSpy = jasmine.createSpyObj('LimparService', ['confirmarLimpeza']);
-    sessionStorage.clear(); // garante que a lista comece vazia
+    localStorage.clear(); // garante que a lista comece vazia
 
 
     TestBed.configureTestingModule({
@@ -111,8 +115,8 @@ describe('Home (métodos TS)', () => {
     fixture.detectChanges();
   });
 
-  it('addItemList deve adicionar item válido à lista, salvar no sessionStorage e resetar form', () => {
-    sessionStorage.clear(); // evita itens pré-existentes
+  it('addItemList deve adicionar item válido à lista, salvar no localStorage e resetar form', () => {
+    localStorage.clear(); // evita itens pré-existentes
     component.form.setValue({ valor: 10, quantidade: 2, produto: 'Arroz' });
 
     component.addItemList();
@@ -121,17 +125,17 @@ describe('Home (métodos TS)', () => {
     expect(component.list()[0]).toEqual({ valor: 10, quantidade: 2, produto: 'Arroz' });
     expect(component.itemParaAdicionar).toEqual({ valor: 10, quantidade: 2, produto: 'Arroz' });
     expect(component.form.value).toEqual({ valor: null, quantidade: null, produto: null });
-    expect(JSON.parse(sessionStorage.getItem('lista-compras')!)).toEqual([{ valor: 10, quantidade: 2, produto: 'Arroz' }]);
+    expect(JSON.parse(localStorage.getItem('lista-compras')!)).toEqual([{ valor: 10, quantidade: 2, produto: 'Arroz' }]);
   });
 
   it('não deve adicionar item se o formulário for inválido na chamada de addItemList', () => {
-    sessionStorage.clear();
+    localStorage.clear();
     component.form.setValue({ valor: null, quantidade: null, produto: null });
     
     component.addItemList();
     
     expect(component.list().length).toBe(0);
-    expect(sessionStorage.getItem('lista-compras')).toBeNull();
+    expect(localStorage.getItem('lista-compras')).toBeNull();
   });
 
   it('deve calcular o valorTotal corretamente', () => {
@@ -142,14 +146,14 @@ describe('Home (métodos TS)', () => {
     expect(component.valorTotal()).toBe(36.00);
   });
 
-  it('deve carregar a lista do sessionStorage ao inicializar', () => {
-    sessionStorage.setItem('lista-compras', JSON.stringify([{ produto: 'Café', quantidade: 1, valor: 10 }]));
+  it('deve carregar a lista do localStorage ao inicializar', () => {
+    localStorage.setItem('lista-compras', JSON.stringify([{ produto: 'Café', quantidade: 1, valor: 10 }]));
     const newFixture = TestBed.createComponent(Home);
     const newComponent = newFixture.componentInstance;
     
     expect(newComponent.list().length).toBe(1);
     expect(newComponent.list()[0].produto).toBe('Café');
-    sessionStorage.clear();
+    localStorage.clear();
   });
 
 

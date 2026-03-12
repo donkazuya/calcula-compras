@@ -57,7 +57,7 @@ export class Home {
       produto: [''],
     });
 
-    const savedList = sessionStorage.getItem('lista-compras');
+    const savedList = localStorage.getItem('lista-compras');
     if (savedList) {
       this.list.set(JSON.parse(savedList));
     }
@@ -68,7 +68,7 @@ export class Home {
       const item = structuredClone(this.form.value)
 
       this.list.update(current => [...current, item]);
-      sessionStorage.setItem('lista-compras', JSON.stringify(this.list()));
+      localStorage.setItem('lista-compras', JSON.stringify(this.list()));
       this.itemParaAdicionar = item;
       this.form.reset();
     }
@@ -80,12 +80,12 @@ export class Home {
 
   removerItem(index: number) {
     this.list.update(current => current.filter((_, i) => i !== index));
-    sessionStorage.setItem('lista-compras', JSON.stringify(this.list()));
+    localStorage.setItem('lista-compras', JSON.stringify(this.list()));
   }
 
   removerLista() {
     this.list.set([]);
-    sessionStorage.removeItem('lista-compras');
+    localStorage.removeItem('lista-compras');
   }
 
   getErrorMessage$(controlName: string): Observable<string | null> {
