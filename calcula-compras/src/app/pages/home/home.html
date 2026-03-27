@@ -1,80 +1,56 @@
 <div class="form">
-  <form
-    (ngSubmit)="addItemList()"
-    [formGroup]="form"
-    tuiAppearance="floating"
-    tuiCardLarge
-    tuiForm="m"
-  >
+  <form (ngSubmit)="addItemList()" [formGroup]="form" tuiAppearance="floating" tuiCardLarge tuiForm="m">
     <header tuiHeader>
       <div class="valor-total">
         <h2 tuiTitle>Valor total da compra</h2>
         <h1 tuiTitle class="valor">R$ {{valorTotal() | number:'1.2-2':'pt-BR'}}</h1>
       </div>
+      <div>
+        <button tuiButton tuiDropdownToggle type="button" iconEnd="@tui.settings" [tuiDropdown]="dropdown"
+          appearance="outline" [(tuiDropdownOpen)]="open">
+          <ng-template #dropdown>
+            <tui-data-list>
+              @for (item of menu; track $index) {
+              <button tuiOption type="button" (click)="item.action()">
+                {{ item.label }}
+              </button>
+              }
+            </tui-data-list>
+          </ng-template>
+        </button>
+      </div>
     </header>
 
     <tui-textfield>
-        <label tuiLabel>Valor</label>
-        <input
-            formControlName="valor"
-            placeholder="R$ 0,00"
-            tuiTextfield
-            mask="separator.2"
-            prefix="R$ "
-            type="text"
-            inputmode="decimal"
-        />
+      <label tuiLabel>Valor</label>
+      <input formControlName="valor" placeholder="R$ 0,00" tuiTextfield mask="separator.2" prefix="R$ " type="text"
+        inputmode="decimal" />
     </tui-textfield>
-    <tui-error
-        [error]="getErrorMessage$('valor') | async"
-    />
+    <tui-error [error]="getErrorMessage$('valor') | async" />
 
     <tui-textfield>
-        <label tuiLabel>Quantidade</label>
-        <input
-            formControlName="quantidade"
-            placeholder="0"
-            tuiTextfield
-            mask="0*"
-            type="text"
-            inputmode="numeric"
-        />
+      <label tuiLabel>Quantidade</label>
+      <input formControlName="quantidade" placeholder="0" tuiTextfield mask="0*" type="text" inputmode="numeric" />
     </tui-textfield>
-    <tui-error
-        [error]="getErrorMessage$('quantidade') | async"
-    />
+    <tui-error [error]="getErrorMessage$('quantidade') | async" />
 
     <tui-textfield>
-        <label tuiLabel>Produto</label>
-        <input
-            formControlName="produto"
-            placeholder="Leite"
-            tuiTextfield
-        />
+      <label tuiLabel>Produto</label>
+      <input formControlName="produto" placeholder="Leite" tuiTextfield />
     </tui-textfield>
-    <tui-error
-        [error]="getErrorMessage$('produto') | async"
-    />
+    <tui-error [error]="getErrorMessage$('produto') | async" />
     <div class="button-box">
       <button type="submit" tuiButton>Adicionar a lista</button>
       @if(list().length > 0) {
-        <button
-          tuiButton
-          appearance="accent"
-          (click)="limpar('list')"
-        >
-          Limpar lista
-        </button>
+      <button tuiButton appearance="accent" (click)="limpar('list')">
+        Limpar lista
+      </button>
       }
     </div>
   </form>
 
 
   @if(list().length > 0) {
-    <app-table-list
-      [list]="list"
-      [novoItem]="itemParaAdicionar"
-      (limpar)="limpar($event)"
-    ></app-table-list>
+  <app-table-list [list]="list" [novoItem]="itemParaAdicionar" (limpar)="limpar($event)"></app-table-list>
   }
 </div>

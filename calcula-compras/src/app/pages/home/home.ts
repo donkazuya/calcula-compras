@@ -8,12 +8,15 @@ import {
   TuiError,
   TuiTextfield,
   TuiTitle,
+  TuiDropdown,
+  TuiDataList
 } from '@taiga-ui/core';
 import { TuiCardLarge, TuiForm, TuiHeader } from '@taiga-ui/layout';
 import { NgxMaskDirective } from 'ngx-mask';
 import { TableList } from '../../shared/table-list/table-list';
 import { ErroForm } from '../../services/erro-form';
 import { LimparService } from '../../services/limpar';
+import { ExportExcelService } from '../../services/export-excel';
 
 
 @Component({
@@ -32,6 +35,8 @@ import { LimparService } from '../../services/limpar';
     TuiTextfield,
     TuiTitle,
     DecimalPipe,
+    TuiDataList,
+    TuiDropdown,
     TableList
   ],
   templateUrl: './home.html',
@@ -41,6 +46,9 @@ import { LimparService } from '../../services/limpar';
 export class Home {
   form: FormGroup;
   list = signal<any[]>([]);
+  protected readonly menu = [{ label: 'Exportar Relatório', action: () => this.exportarExcel() }];
+  protected open = false;
+  private exportExcelService = inject(ExportExcelService);
   valorTotal = computed(() =>
     this.list().reduce((acc, item) => acc + Number(item.valor) * Number(item.quantidade), 0)
   );
@@ -103,5 +111,25 @@ export class Home {
 
   trackByIndex(index: number): number {
     return index;
+  }
+
+  exportarExcel() {
+    const dados = this.list()
+      .map(item => ({
+        Produto: this.capitalizar(item.produto),
+        Quantidade: item.quantidade,
+        'Valor Unitário': item.valor,
+        'Valor x Quantidade': item.valor * item.quantidade
+      }))
+      .sort((a, b) => a.Produto.localeCompare(b.Produto));
+
+    this.exportExcelService.exportarRelatorio('RelatorioCompra', dados);
+
+    this.open = false;
+  }
+
+  private capitalizar(texto: string): string {
+    if (!texto) return '';
+    return texto.charAt(0).toUpperCase() + texto.slice(1).toLowerCase();
   }
 }

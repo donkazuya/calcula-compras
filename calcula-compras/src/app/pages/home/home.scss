@@ -1,6 +1,7 @@
 .form {
   padding: 1rem;
 }
+
 .valor-total {
   padding: 1rem 0;
 }
@@ -19,4 +20,7 @@ form {
   justify-content: space-between;
 }
 
-
+header {
+  display: flex;
+  justify-content: space-between;
+}
