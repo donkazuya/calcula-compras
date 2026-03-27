@@ -3,13 +3,13 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { AsyncPipe, DecimalPipe } from '@angular/common';
 import { Observable } from 'rxjs';
 import {
-    TuiAppearance,
-    TuiButton,
-    TuiError,
-    TuiTextfield,
-    TuiTitle,
+  TuiAppearance,
+  TuiButton,
+  TuiError,
+  TuiTextfield,
+  TuiTitle,
 } from '@taiga-ui/core';
-import {TuiCardLarge, TuiForm, TuiHeader} from '@taiga-ui/layout';
+import { TuiCardLarge, TuiForm, TuiHeader } from '@taiga-ui/layout';
 import { NgxMaskDirective } from 'ngx-mask';
 import { TableList } from '../../shared/table-list/table-list';
 import { ErroForm } from '../../services/erro-form';
@@ -53,7 +53,7 @@ export class Home {
   ) {
     this.form = this.fb.group({
       valor: ['', [Validators.required]],
-      quantidade: ['', [Validators.required]],
+      quantidade: [1, [Validators.required]],
       produto: [''],
     });
 
@@ -64,13 +64,14 @@ export class Home {
   }
 
   addItemList() {
-    if(this.form.valid) {
+    if (this.form.valid) {
       const item = structuredClone(this.form.value)
 
-      this.list.update(current => [...current, item]);
+      this.list.update(current => [item, ...current]);
       localStorage.setItem('lista-compras', JSON.stringify(this.list()));
       this.itemParaAdicionar = item;
       this.form.reset();
+      this.form.get('quantidade')?.setValue(1);
     }
   }
 
@@ -101,6 +102,6 @@ export class Home {
   }
 
   trackByIndex(index: number): number {
-      return index;
+    return index;
   }
 }

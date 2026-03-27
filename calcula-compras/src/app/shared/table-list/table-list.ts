@@ -37,7 +37,7 @@ export class TableList implements OnInit {
   @Input() list = signal<any[]>([]);
   @Input() set novoItem(item: any) {
     if (!this.carregandoInicial && item) {
-      this.adicionarItem(item);
+      this.adicionarItemNoTopo(item);
     }
   }
   @Output() itemAdicionado = new EventEmitter<number>();
@@ -91,6 +91,19 @@ export class TableList implements OnInit {
     );
 
     this.itemAdicionado.emit(this.itens.length - 1);
+    this.cdr.markForCheck();
+  }
+
+  adicionarItemNoTopo(item: any) {
+    this.itens.insert(0,
+      this.fb.group({
+        quantidade: [item.quantidade, [Validators.required]],
+        valor: [item.valor, [Validators.required]],
+        produto: [item.produto],
+      })
+    );
+
+    this.itemAdicionado.emit(0);
     this.cdr.markForCheck();
   }
 
